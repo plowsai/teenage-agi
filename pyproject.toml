@@ -18,6 +18,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
+flask = "^2.3.0"
+flask-wtf = "^1.1.1"
+plotly = "^5.15.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
@@ -31,3 +34,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jordan/teen-agi/issues"
+
+[tool.poetry.scripts]
+teenagi-dashboard = "teenagi.dashboard.app:main"

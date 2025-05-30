@@ -2,6 +2,14 @@
 
 A Python package inspired by BabyAGI(babyagi.org).
 
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+  - [Setup Development Environment](#setup-development-environment)
+- [License](#license)
+- [Contributing](#contributing)
+
 ## Installation
 
 ```bash
