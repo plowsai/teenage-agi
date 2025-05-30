@@ -2,7 +2,7 @@
 name = "teenagi"
 version = "0.2.0"
 description = "A Python package for teen-agi"
-authors = ["Jordan Plows  <jordan@lightapi.com>"]
+authors = ["Jordan Plows  <jordan@plows.ai"]
 readme = "README.md"
 license = "MIT"
 homepage = "https://github.com/jordan/teen-agi"
