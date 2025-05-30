@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teenagi"
-version = "0.3.0"
+version = "0.4.0"
 description = "A Python package for building AI agents capable of making multiple function calls in sequence"
 authors = ["Jordan Plows <jordan@plows.ai>"]
 readme = "README.md"

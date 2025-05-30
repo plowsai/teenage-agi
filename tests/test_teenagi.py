@@ -2,20 +2,28 @@
 Tests for the TeenAGI package.
 """
 
+import os
 import pytest
+from unittest.mock import patch, MagicMock
+
 from teenagi import TeenAGI, create_agent
 
 
-def test_teenagi_init():
+@patch('teenagi.core.TeenAGI._initialize_client')
+def test_teenagi_init(mock_init_client):
     """Test TeenAGI initialization."""
-    agent = TeenAGI(name="TestAgent")
+    agent = TeenAGI(name="TestAgent", api_key="fake_key", provider="openai")
     assert agent.name == "TestAgent"
     assert agent.capabilities == []
+    assert agent.api_key == "fake_key"
+    assert agent.provider == "openai"
+    mock_init_client.assert_called_once()
 
 
-def test_teenagi_learn():
+@patch('teenagi.core.TeenAGI._initialize_client')
+def test_teenagi_learn(mock_init_client):
     """Test TeenAGI learning functionality."""
-    agent = TeenAGI()
+    agent = TeenAGI(api_key="fake_key")
     
     # Test adding a valid capability
     assert agent.learn("can search the web")
@@ -31,27 +39,35 @@ def test_teenagi_learn():
     assert len(agent.capabilities) == 3
 
 
-def test_teenagi_respond():
+@patch('teenagi.core.TeenAGI._initialize_client')
+@patch('teenagi.core.TeenAGI._generate_response')
+def test_teenagi_respond(mock_generate, mock_init_client):
     """Test TeenAGI response generation."""
-    agent = TeenAGI(name="ResponderAgent")
+    mock_generate.return_value = "This is a test response"
+    
+    agent = TeenAGI(name="ResponderAgent", api_key="fake_key")
     
     # Response with no capabilities
     response = agent.respond("Hello")
     assert "ResponderAgent" in response
     assert "don't have any capabilities" in response
+    assert not mock_generate.called
     
     # Add capabilities and test response
     agent.learn("can search the web")
     agent.learn("can summarize text")
+    
     response = agent.respond("Find and summarize an article")
-    assert "ResponderAgent" in response
-    assert "search the web" in response
-    assert "summarize text" in response
+    mock_generate.assert_called_once()
+    assert response == "This is a test response"
 
 
-def test_create_agent():
+@patch('teenagi.core.TeenAGI._initialize_client')
+def test_create_agent(mock_init_client):
     """Test the create_agent factory function."""
-    agent = create_agent(name="FactoryAgent")
+    agent = create_agent(name="FactoryAgent", api_key="fake_key", provider="anthropic")
     assert isinstance(agent, TeenAGI)
     assert agent.name == "FactoryAgent"
-    assert agent.capabilities == [] 
+    assert agent.capabilities == []
+    assert agent.provider == "anthropic"
+    assert agent.api_key == "fake_key" 
