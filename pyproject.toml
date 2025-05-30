@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "teenageagi"
-version = "0.1.0"
-description = "A Python package for teenage-agi"
+name = "teenagi"
+version = "0.2.0"
+description = "A Python package for teen-agi"
 authors = ["Jordan Plows  <jordan@lightapi.com>"]
 readme = "README.md"
 license = "MIT"
-homepage = "https://github.com/jordan/teenage-agi"
-repository = "https://github.com/jordan/teenage-agi"
+homepage = "https://github.com/jordan/teen-agi"
+repository = "https://github.com/jordan/teen-agi"
 keywords = ["ai", "agi"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -30,4 +30,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/jordan/teenage-agi/issues"
+"Bug Tracker" = "https://github.com/jordan/teen-agi/issues"

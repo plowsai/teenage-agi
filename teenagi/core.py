@@ -1,15 +1,15 @@
 """
-Core functionality for the TeenageAGI package.
+Core functionality for the TeenAGI package.
 """
 
-class TeenageAGI:
+class TeenAGI:
     """
-    Main class for TeenageAGI functionality.
+    Main class for TeenAGI functionality.
     """
     
-    def __init__(self, name="TeenageAGI", age=16):
+    def __init__(self, name="TeenAGI", age=16):
         """
-        Initialize a TeenageAGI instance.
+        Initialize a TeenAGI instance.
         
         Args:
             name (str): Name of the AGI
@@ -17,7 +17,7 @@ class TeenageAGI:
         """
         self.name = name
         if not (13 <= age <= 19):
-            raise ValueError("Age must be between 13 and 19 for a teenage AGI")
+            raise ValueError("Age must be between 13 and 19 for a teen AGI")
         self.age = age
         self.knowledge_base = []
     
@@ -52,15 +52,15 @@ class TeenageAGI:
         
         return f"Hi, I'm {self.name}, a {self.age}-year-old AGI. Based on what I know, here's my response to '{prompt}': ..."
 
-def create_agent(name="TeenageAGI", age=16):
+def create_agent(name="TeenAGI", age=16):
     """
-    Factory function to create a TeenageAGI instance.
+    Factory function to create a TeenAGI instance.
     
     Args:
         name (str): Name of the AGI
         age (int): Age of the AGI
         
     Returns:
-        TeenageAGI: An initialized TeenageAGI instance
+        TeenAGI: An initialized TeenAGI instance
     """
-    return TeenageAGI(name=name, age=age) 
+    return TeenAGI(name=name, age=age) 

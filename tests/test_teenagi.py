@@ -1,31 +1,31 @@
 """
-Tests for the TeenageAGI package.
+Tests for the TeenAGI package.
 """
 
 import pytest
-from teenageagi import TeenageAGI, create_agent
+from teenagi import TeenAGI, create_agent
 
 
-def test_teenageagi_init():
-    """Test TeenageAGI initialization."""
-    agi = TeenageAGI(name="TestAGI", age=15)
+def test_teenagi_init():
+    """Test TeenAGI initialization."""
+    agi = TeenAGI(name="TestAGI", age=15)
     assert agi.name == "TestAGI"
     assert agi.age == 15
     assert agi.knowledge_base == []
 
 
-def test_teenageagi_invalid_age():
-    """Test TeenageAGI with invalid age."""
+def test_teenagi_invalid_age():
+    """Test TeenAGI with invalid age."""
     with pytest.raises(ValueError):
-        TeenageAGI(age=20)  # Too old
+        TeenAGI(age=20)  # Too old
     
     with pytest.raises(ValueError):
-        TeenageAGI(age=12)  # Too young
+        TeenAGI(age=12)  # Too young
 
 
-def test_teenageagi_learn():
-    """Test TeenageAGI learning functionality."""
-    agi = TeenageAGI()
+def test_teenagi_learn():
+    """Test TeenAGI learning functionality."""
+    agi = TeenAGI()
     
     # Test learning something valid
     assert agi.learn("Python is a programming language")
@@ -36,9 +36,9 @@ def test_teenageagi_learn():
     assert len(agi.knowledge_base) == 1
 
 
-def test_teenageagi_respond():
-    """Test TeenageAGI response generation."""
-    agi = TeenageAGI(name="ResponderAGI", age=16)
+def test_teenagi_respond():
+    """Test TeenAGI response generation."""
+    agi = TeenAGI(name="ResponderAGI", age=16)
     
     # Response with empty knowledge base
     response = agi.respond("Hello")
@@ -57,6 +57,6 @@ def test_teenageagi_respond():
 def test_create_agent():
     """Test the create_agent factory function."""
     agi = create_agent(name="FactoryAGI", age=17)
-    assert isinstance(agi, TeenageAGI)
+    assert isinstance(agi, TeenAGI)
     assert agi.name == "FactoryAGI"
     assert agi.age == 17 

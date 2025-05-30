@@ -1,20 +1,20 @@
-# TeenageAGI
+# TeenAGI
 
 A Python package inspired by BabyAGI(babyagi.org).
 
 ## Installation
 
 ```bash
-pip install teenageagi
+pip install teenagi
 ```
 
 ## Usage
 
 ```python
-from teenageagi import TeenageAGI, create_agent
+from teenagi import TeenAGI, create_agent
 
-# Create a teenage AGI with custom name and age
-agent = TeenageAGI(name="Alex", age=16)
+# Create a teen AGI with custom name and age
+agent = TeenAGI(name="Alex", age=16)
 
 # Add knowledge to the agent
 agent.learn("Python is a versatile programming language")
@@ -28,12 +28,10 @@ print(response)
 factory_agent = create_agent(name="Sam", age=17)
 ```
 
-## Features
+<!-- ## Features
 
-- Create AGI agents with customizable names and teenage ages (13-19)
 - Add knowledge to your AGI's knowledge base
-- Generate responses based on accumulated knowledge
-- Simple and intuitive API
+- Generate responses based on accumulated knowledge -->
 
 ## Development
 
@@ -41,8 +39,8 @@ factory_agent = create_agent(name="Sam", age=17)
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordan/teenage-agi.git
-cd teenage-agi
+git clone https://github.com/jordan/teen-agi.git
+cd teen-agi
 
 # Install dependencies with Poetry
 poetry install
