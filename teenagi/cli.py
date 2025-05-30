@@ -6,12 +6,19 @@ Command Line Interface for TeenAGI.
 import argparse
 import os
 import sys
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from teenagi import TeenAGI, create_agent, __version__
 
-# Load environment variables from .env file if present
-load_dotenv()
+# Load environment variables from .env file
+env_file = find_dotenv()
+if not env_file:
+    print("Warning: No .env file found. Please create one with your API keys.")
+    print("Example:")
+    print("  OPENAI_API_KEY=your_openai_api_key_here")
+    print("  ANTHROPIC_API_KEY=your_anthropic_api_key_here")
+else:
+    load_dotenv(env_file)
 
 
 def main():
@@ -22,7 +29,6 @@ def main():
     parser.add_argument('--capabilities', type=str, nargs='*', help="Capabilities to add to the agent")
     parser.add_argument('--provider', type=str, choices=['openai', 'anthropic'], default='openai',
                         help="AI provider to use (openai or anthropic)")
-    parser.add_argument('--api-key', type=str, help="API key for the selected provider")
     parser.add_argument('--model', type=str, help="Model to use (provider-specific)")
     parser.add_argument('prompt', nargs='?', help="Prompt to send to the agent")
     
@@ -32,25 +38,20 @@ def main():
         parser.print_help()
         return
     
-    # Get API key from args, or environment variable
-    api_key = args.api_key
-    if not api_key:
-        if args.provider == 'openai':
-            api_key = os.environ.get("OPENAI_API_KEY")
-            if not api_key:
-                print("Error: OpenAI API key not provided. Use --api-key or set OPENAI_API_KEY environment variable.")
-                return 1
-        elif args.provider == 'anthropic':
-            api_key = os.environ.get("ANTHROPIC_API_KEY")
-            if not api_key:
-                print("Error: Anthropic API key not provided. Use --api-key or set ANTHROPIC_API_KEY environment variable.")
-                return 1
+    # Check for required API keys
+    if args.provider == 'openai' and not os.environ.get("OPENAI_API_KEY"):
+        print("Error: OPENAI_API_KEY not found in .env file.")
+        print("Please create a .env file with your OpenAI API key.")
+        return 1
+    elif args.provider == 'anthropic' and not os.environ.get("ANTHROPIC_API_KEY"):
+        print("Error: ANTHROPIC_API_KEY not found in .env file.")
+        print("Please create a .env file with your Anthropic API key.")
+        return 1
     
     try:
         # Create an agent
         agent = create_agent(
             name=args.name,
-            api_key=api_key,
             provider=args.provider,
             model=args.model
         )

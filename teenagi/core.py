@@ -4,6 +4,10 @@ Core functionality for the TeenAGI package.
 
 import os
 from typing import List, Optional, Union, Dict, Any
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 try:
     import openai
@@ -26,23 +30,20 @@ class TeenAGI:
     TeenAGI is an agent that can perform multiple function calls in sequence.
     """
     
-    def __init__(self, name="TeenAGI", api_key: Optional[str] = None, provider: str = "openai",
-                 model: Optional[str] = None):
+    def __init__(self, name="TeenAGI", provider: str = "openai", model: Optional[str] = None):
         """
         Initialize a TeenAGI instance.
         
         Args:
             name (str): Name of the agent
-            api_key (str, optional): API key for the selected provider
             provider (str): "openai" or "anthropic"
             model (str, optional): Model to use (defaults to appropriate model for provider)
         """
         self.name = name
         self.capabilities = []
         self.provider = provider.lower()
-        self.api_key = api_key
-        self.client = None
         self.model = model
+        self.client = None
         
         # Initialize provider client
         self._initialize_client()
@@ -53,10 +54,12 @@ class TeenAGI:
             if not OPENAI_AVAILABLE:
                 raise ImportError("OpenAI package is not installed. Install with 'pip install openai'")
             
-            # Use provided API key, or get from environment
-            api_key = self.api_key or os.environ.get("OPENAI_API_KEY")
+            # Get API key from environment
+            api_key = os.environ.get("OPENAI_API_KEY")
             if not api_key:
-                raise ValueError("OpenAI API key must be provided or set as OPENAI_API_KEY environment variable")
+                raise ValueError(
+                    "OpenAI API key not found. Please create a .env file with OPENAI_API_KEY=your_key"
+                )
             
             self.client = OpenAI(api_key=api_key)
             self.model = self.model or "gpt-3.5-turbo"
@@ -65,10 +68,12 @@ class TeenAGI:
             if not ANTHROPIC_AVAILABLE:
                 raise ImportError("Anthropic package is not installed. Install with 'pip install anthropic'")
             
-            # Use provided API key, or get from environment
-            api_key = self.api_key or os.environ.get("ANTHROPIC_API_KEY")
+            # Get API key from environment
+            api_key = os.environ.get("ANTHROPIC_API_KEY")
             if not api_key:
-                raise ValueError("Anthropic API key must be provided or set as ANTHROPIC_API_KEY environment variable")
+                raise ValueError(
+                    "Anthropic API key not found. Please create a .env file with ANTHROPIC_API_KEY=your_key"
+                )
             
             self.client = Anthropic(api_key=api_key)
             self.model = self.model or "claude-3-haiku-20240307"
@@ -166,17 +171,16 @@ Explain your approach to solving the task by mentioning which capabilities you'l
             return f"Error generating response with Anthropic: {str(e)}"
 
 
-def create_agent(name="TeenAGI", api_key=None, provider="openai", model=None):
+def create_agent(name="TeenAGI", provider="openai", model=None):
     """
     Factory function to create a TeenAGI instance.
     
     Args:
         name (str): Name of the agent
-        api_key (str, optional): API key for the selected provider
         provider (str): "openai" or "anthropic"
         model (str, optional): Model to use
         
     Returns:
         TeenAGI: An initialized TeenAGI instance
     """
-    return TeenAGI(name=name, api_key=api_key, provider=provider, model=model) 
+    return TeenAGI(name=name, provider=provider, model=model) 
