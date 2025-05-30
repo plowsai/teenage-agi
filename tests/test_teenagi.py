@@ -8,55 +8,50 @@ from teenagi import TeenAGI, create_agent
 
 def test_teenagi_init():
     """Test TeenAGI initialization."""
-    agi = TeenAGI(name="TestAGI", age=15)
-    assert agi.name == "TestAGI"
-    assert agi.age == 15
-    assert agi.knowledge_base == []
-
-
-def test_teenagi_invalid_age():
-    """Test TeenAGI with invalid age."""
-    with pytest.raises(ValueError):
-        TeenAGI(age=20)  # Too old
-    
-    with pytest.raises(ValueError):
-        TeenAGI(age=12)  # Too young
+    agent = TeenAGI(name="TestAgent")
+    assert agent.name == "TestAgent"
+    assert agent.capabilities == []
 
 
 def test_teenagi_learn():
     """Test TeenAGI learning functionality."""
-    agi = TeenAGI()
+    agent = TeenAGI()
     
-    # Test learning something valid
-    assert agi.learn("Python is a programming language")
-    assert len(agi.knowledge_base) == 1
+    # Test adding a valid capability
+    assert agent.learn("can search the web")
+    assert len(agent.capabilities) == 1
     
-    # Test learning empty string (should fail)
-    assert not agi.learn("")
-    assert len(agi.knowledge_base) == 1
+    # Test adding an empty capability (should fail)
+    assert not agent.learn("")
+    assert len(agent.capabilities) == 1
+    
+    # Test adding multiple capabilities
+    agent.learn("can summarize text")
+    agent.learn("can translate languages")
+    assert len(agent.capabilities) == 3
 
 
 def test_teenagi_respond():
     """Test TeenAGI response generation."""
-    agi = TeenAGI(name="ResponderAGI", age=16)
+    agent = TeenAGI(name="ResponderAgent")
     
-    # Response with empty knowledge base
-    response = agi.respond("Hello")
-    assert "ResponderAGI" in response
-    assert "16" in response
-    assert "don't know much" in response
+    # Response with no capabilities
+    response = agent.respond("Hello")
+    assert "ResponderAgent" in response
+    assert "don't have any capabilities" in response
     
-    # Add knowledge and test response
-    agi.learn("Important information")
-    response = agi.respond("Tell me something")
-    assert "ResponderAGI" in response
-    assert "16" in response
-    assert "Based on what I know" in response
+    # Add capabilities and test response
+    agent.learn("can search the web")
+    agent.learn("can summarize text")
+    response = agent.respond("Find and summarize an article")
+    assert "ResponderAgent" in response
+    assert "search the web" in response
+    assert "summarize text" in response
 
 
 def test_create_agent():
     """Test the create_agent factory function."""
-    agi = create_agent(name="FactoryAGI", age=17)
-    assert isinstance(agi, TeenAGI)
-    assert agi.name == "FactoryAGI"
-    assert agi.age == 17 
+    agent = create_agent(name="FactoryAgent")
+    assert isinstance(agent, TeenAGI)
+    assert agent.name == "FactoryAgent"
+    assert agent.capabilities == [] 
