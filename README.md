@@ -1,6 +1,6 @@
 # TeenageAGI
 
-A Python package for creating and interacting with simulated teenage artificial general intelligence agents.
+A Python package inspired by BabyAGI(babyagi.org).
 
 ## Installation
 
