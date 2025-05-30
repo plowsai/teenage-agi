@@ -8,6 +8,8 @@ A Python package for building AI agents capable of making multiple function call
   - [Setting Up API Keys](#setting-up-api-keys)
   - [Python API](#python-api)
   - [Command Line Interface](#command-line-interface)
+  - [Function Registration](#function-registration)
+- [How It Works](#how-it-works)
 - [Development](#development)
   - [Setup Development Environment](#setup-development-environment)
 - [License](#license)
@@ -77,6 +79,97 @@ teenagi --provider openai --model "gpt-4" "Explain quantum entanglement"
 # Using with Anthropic (requires ANTHROPIC_API_KEY in .env)
 teenagi --provider anthropic --model "claude-3-sonnet-20240229" "Explain quantum entanglement"
 ```
+
+### Function Registration
+
+TeenAGI can call actual Python functions. Here's how to register and use functions:
+
+```python
+from teenagi import TeenAGI
+import datetime
+
+# Create an agent
+agent = TeenAGI(name="AssistantBot", provider="anthropic")
+
+# Register functions using the decorator syntax
+@agent.register_function(description="Get the current date and time")
+def get_current_time() -> str:
+    """Get the current date and time."""
+    now = datetime.datetime.now()
+    return now.strftime("%Y-%m-%d %H:%M:%S")
+
+@agent.register_function(description="Get weather information for a location")
+def get_weather(location: str) -> dict:
+    """
+    Get current weather for a location.
+    
+    Args:
+        location: City name or location
+    """
+    # In a real app, you'd call a weather API
+    return {
+        "location": location,
+        "temperature": 72,
+        "condition": "Sunny",
+        "humidity": 65
+    }
+
+# Add capabilities to the agent
+agent.learn("can check the current time")
+agent.learn("can get weather information")
+
+# Let the agent use the functions
+response = agent.respond("What time is it now and what's the weather in New York?")
+print(response)
+```
+
+The agent will:
+1. Determine which functions to call based on the user's request
+2. Call the appropriate functions with the right parameters
+3. Incorporate the function results into the final response
+
+When calling functions, TeenAGI will:
+- Automatically parse and validate function arguments
+- Handle type conversions
+- Provide helpful error messages
+- Support complex parameter types
+- Allow multiple function calls in sequence
+
+## How It Works
+
+TeenAGI enables LLMs to use registered Python functions based on the user's request. Here's how it works:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant TeenAGI
+    participant LLM as LLM (OpenAI/Anthropic)
+    participant Functions as Registered Functions
+    
+    User->>TeenAGI: respond("Get weather in London and calculate 15*7")
+    TeenAGI->>LLM: Send prompt with available functions
+    LLM-->>TeenAGI: Function call: get_weather("London")
+    TeenAGI->>Functions: Execute get_weather("London")
+    Functions-->>TeenAGI: Return weather data
+    TeenAGI->>LLM: Send weather data, continue with request
+    LLM-->>TeenAGI: Function call: calculate("15*7")
+    TeenAGI->>Functions: Execute calculate("15*7")
+    Functions-->>TeenAGI: Return 105
+    TeenAGI->>LLM: Send calculation result, request final response
+    LLM-->>TeenAGI: Generate final response with all data
+    TeenAGI->>User: Return complete response
+```
+
+The process follows these steps:
+
+1. **Registration**: Register Python functions with the agent
+2. **Request**: User sends a natural language request
+3. **Function Selection**: LLM determines which functions to call based on the request
+4. **Execution**: TeenAGI executes the selected functions with the provided arguments
+5. **Iteration**: Results are fed back to the LLM, which may call additional functions
+6. **Response**: After all necessary functions are called, a final response is generated
+
+This approach allows TeenAGI to perform real actions and access external data sources while maintaining a simple, natural language interface.
 
 ## Development
 
