@@ -177,7 +177,7 @@ This approach allows TeenAGI to perform real actions and access external data so
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordan/teen-agi.git
+git clone https://github.com/plowsai/teenagi
 cd teen-agi
 
 # Install dependencies with Poetry
