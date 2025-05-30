@@ -2,7 +2,7 @@
 TeenAGI - A Python package for building AI agents capable of making multiple function calls in sequence.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 from .core import TeenAGI, create_agent
 from .function_registry import registry
